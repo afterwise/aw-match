@@ -9,6 +9,9 @@ int main(int argc, char *argv[]) {
 	char *end;
 	char *res;
 
+	(void) argc;
+	(void) argv;
+
 	expr = "aaa";
 	str = "aa";
 	res = match(expr, str, &end);
