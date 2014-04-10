@@ -21,7 +21,9 @@
    THE SOFTWARE.
  */
 
-#include <stdbool.h>
+#if !_MSC_VER
+# include <stdbool.h>
+#endif
 #include "aw-match.h"
 #include "aw-utf8.h"
 
