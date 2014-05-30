@@ -1,0 +1,4 @@
+
+REQUIRES = \
+	../aw-utf8
+
