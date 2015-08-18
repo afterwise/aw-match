@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 	assert(res == str);
 	assert(*end == 0);
 
-	expr = "a.a";
+	expr = "a%?a";
 	str = "aaa";
 	res = match(expr, str, &end);
 	assert(res == str);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 	assert(res == str);
 	assert(*end == 0);
 
-	expr = "aa.*a";
+	expr = "aa%?*a";
 	str = "aaa";
 	res = match(expr, str, &end);
 	assert(res == str);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 	assert(res == str + 5);
 	assert(*end == '\n');
 
-	expr = "%f%f*%s~%s.*\n";
+	expr = "%f%f*%s~%s%?*\n";
 	str = "1024.0123 X\r\n";
 	res = match(expr, str, &end);
 	assert(res == str);

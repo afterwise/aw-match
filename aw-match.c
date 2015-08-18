@@ -41,7 +41,7 @@ static bool match_char(unsigned c, int flags, struct utf8_iter *text) {
 	bool yes = !(flags & NEGATE);
 
 	if (!(flags & CLASS)) {
-		if (c == text->chr || c == '.')
+		if (c == text->chr)
 			return yes;
 	} else if (c == 'a') {
 		if ((text->chr >= 0x41 && text->chr <= 0x5a) ||
@@ -70,6 +70,8 @@ static bool match_char(unsigned c, int flags, struct utf8_iter *text) {
 				(text->chr >= 0x61 && text->chr <= 0x66) ||
 				(text->chr >= 0x30 && text->chr <= 0x39))
 			return yes;
+	} else if (c == '?') {
+		return yes;
 	}
 
 	return !yes;
@@ -120,6 +122,7 @@ static bool match_here(struct utf8_iter expr, struct utf8_iter text, char **end)
 		case 'n': /* newline */
 		case 's': /* space */
 		case 'x': /* hex */
+		case '?': /* anything */
 			flags |= CLASS;
 		}
 	}
