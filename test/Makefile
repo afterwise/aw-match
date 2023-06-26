@@ -4,8 +4,8 @@ export CFLAGS += -Wall -Wextra
 test: test.o ../libaw-match.a aw-fs/libaw-fs.a aw-utf8/libaw-utf8.a
 	$(CC) $(LDFLAGS) -o $@ $^
 
-%.o: %.c aw-fs/aw-fs.h aw-utf8/aw-utf8.h
-	$(CC) $(CFLAGS) -I.. -Iaw-utf8 -c $< -o $@
+%.o: %.x aw-fs/aw-fs.h aw-utf8/aw-utf8.h
+	$(CC) $(CFLAGS) -I.. -Iaw-utf8 -xc -c $< -o $@
 
 aw-fs/libaw-fs.a:
 	$(MAKE) -Caw-fs

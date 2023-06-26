@@ -1,6 +1,6 @@
 
 /*
-   Copyright (c) 2014 Malte Hildingsson, malte (at) afterwi.se
+   Copyright (c) 2014-2023 Malte Hildingsson, malte (at) afterwi.se
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
    of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,13 @@
 #ifndef AW_MATCH_H
 #define AW_MATCH_H
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 char *match(char *expr, char *text, char **end);
 
-#if __cplusplus
+#ifdef __cplusplus
 } /* extern "C" */
 #endif
 

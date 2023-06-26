@@ -1,6 +1,6 @@
 
 /*
-   Copyright (c) 2014 Malte Hildingsson, malte (at) afterwi.se
+   Copyright (c) 2014-2023 Malte Hildingsson, malte (at) afterwi.se
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
    of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
    THE SOFTWARE.
  */
 
-#if !_MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 # include <stdbool.h>
 #endif
 #include "aw-match.h"
