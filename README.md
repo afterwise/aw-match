@@ -10,4 +10,5 @@ printf-inspired character classes are also supported, they are:
 * %n Newlines and carriage returns
 * %s Whitespace
 * %x Hexadecimal, 0-9 and A-F
+* %? Anything
 
