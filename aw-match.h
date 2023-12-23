@@ -28,7 +28,9 @@
 extern "C" {
 #endif
 
-char *match(char *expr, char *text, char **end);
+#define NOCASE (0x1)
+
+char *match(char *expr, int flags, char *text, char **end);
 
 #ifdef __cplusplus
 } /* extern "C" */

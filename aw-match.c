@@ -32,17 +32,27 @@
    http://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html
  */
 
-#define NEGATE (0x1)
-#define CLASS (0x2)
+#define NEGATE (0x2)
+#define CLASS (0x4)
 
-static bool match_here(struct utf8_iter expr, struct utf8_iter text, char **end);
+static bool match_here(struct utf8_iter expr, int flags, struct utf8_iter text, char **end);
 
 static bool match_char(unsigned c, int flags, struct utf8_iter *text) {
 	bool yes = !(flags & NEGATE);
 
 	if (!(flags & CLASS)) {
-		if (c == text->chr)
-			return yes;
+		if (!(flags & NOCASE)) {
+			if (c == text->chr)
+				return yes;
+		} else {
+			unsigned k = text->chr;
+			if (k >= 0x41 && k <= 0x5a)
+				k += 0x20;
+			if (c >= 0x41 && c <= 0x5a)
+				c += 0x20;
+			if (c == k)
+				return yes;
+		}
 	} else if (c == 'a') {
 		if ((text->chr >= 0x41 && text->chr <= 0x5a) ||
 				(text->chr >= 0x61 && text->chr <= 0x7a) ||
@@ -78,7 +88,7 @@ static bool match_char(unsigned c, int flags, struct utf8_iter *text) {
 }
 
 static bool match_star(unsigned c, int flags, struct utf8_iter expr, struct utf8_iter text, char **end) {
-	for (; !match_here(expr, text, end); utf8_next(&text))
+	for (; !match_here(expr, flags, text, end); utf8_next(&text))
 		if (text.chr == 0 || !match_char(c, flags, &text))
 			return false;
 
@@ -92,12 +102,12 @@ static bool match_plus(unsigned c, int flags, struct utf8_iter expr, struct utf8
 	do utf8_next(&text);
 	while (text.chr != 0 && match_char(c, flags, &text));
 
-	return match_here(expr, text, end);
+	return match_here(expr, flags, text, end);
 }
 
-static bool match_here(struct utf8_iter expr, struct utf8_iter text, char **end) {
+static bool match_here(struct utf8_iter expr, int flags, struct utf8_iter text, char **end) {
 	unsigned pre = expr.chr;
-	int flags = 0;
+	flags &= ~(NEGATE | CLASS);
 
 	if (pre == 0) {
 		if (end != NULL)
@@ -146,13 +156,13 @@ static bool match_here(struct utf8_iter expr, struct utf8_iter text, char **end)
 
 	if (text.chr != 0 && match_char(pre, flags, &text)) {
 		utf8_next(&text);
-		return match_here(expr, text, end);
+		return match_here(expr, flags, text, end);
 	}
 
 	return false;
 }
 
-char *match(char *expr_, char *text_, char **end) {
+char *match(char *expr_, int flags, char *text_, char **end) {
 	struct utf8_iter expr;
 	struct utf8_iter text;
 
@@ -163,10 +173,10 @@ char *match(char *expr_, char *text_, char **end) {
 
 	if (utf8_next(&expr) == '^') {
 		utf8_next(&expr);
-		return match_here(expr, text, end) ? text.head : NULL;
+		return match_here(expr, flags, text, end) ? text.head : NULL;
 	}
 
-	do if (match_here(expr, text, end))
+	do if (match_here(expr, flags, text, end))
 		return text.head;
 	while (text.chr != 0 && utf8_next(&text));
 
