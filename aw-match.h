@@ -1,6 +1,6 @@
 
 /*
-   Copyright (c) 2014-2023 Malte Hildingsson, malte (at) afterwi.se
+   Copyright (c) 2014-2025 Malte Hildingsson, malte (at) afterwi.se
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
    of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,28 @@
 #ifndef AW_MATCH_H
 #define AW_MATCH_H
 
+#if defined(_match_dllexport)
+# if defined(_MSC_VER)
+#  define _match_api extern __declspec(dllexport)
+# elif defined(__GNUC__)
+#  define _match_api __attribute__((visibility("default"))) extern
+# endif
+#elif defined(_match_dllimport)
+# if defined(_MSC_VER)
+#  define _match_api extern __declspec(dllimport)
+# endif
+#endif
+#ifndef _match_api
+# define _match_api extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define NOCASE (0x1)
 
-char *match(char *expr, int flags, char *text, char **end);
+_match_api char *match(char *expr, int flags, char *text, char **end);
 
 #ifdef __cplusplus
 } /* extern "C" */
